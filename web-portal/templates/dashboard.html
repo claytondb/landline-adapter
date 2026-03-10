@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+{% block title %}Dashboard - Kid Phone{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div style="display: flex; justify-content: space-between; align-items: center;">
+        <div>
+            <h1>{{ config.phone_name }}</h1>
+            <span class="status-badge status-online">🟢 Online</span>
+        </div>
+        <div style="font-size: 48px;">📞</div>
+    </div>
+</div>
+
+<div class="card">
+    <h2>👥 Approved Contacts ({{ whitelist|length }})</h2>
+    {% if whitelist %}
+    <ul class="contact-list">
+        {% for contact in whitelist[:5] %}
+        <li class="contact-item">
+            <div class="contact-info">
+                <div class="contact-avatar">{{ contact.name[0] }}</div>
+                <div>
+                    <div class="contact-name">{{ contact.name }}</div>
+                    <div class="contact-number">{{ contact.number }}</div>
+                </div>
+            </div>
+        </li>
+        {% endfor %}
+    </ul>
+    {% if whitelist|length > 5 %}
+    <p style="margin-top: 12px; color: #666;">+ {{ whitelist|length - 5 }} more</p>
+    {% endif %}
+    {% else %}
+    <p style="color: #666;">No contacts added yet.</p>
+    {% endif %}
+    <div style="margin-top: 16px;">
+        <a href="{{ url_for('whitelist_page') }}" class="btn btn-secondary">Manage Contacts</a>
+    </div>
+</div>
+
+<div class="card">
+    <h2>📞 Recent Calls</h2>
+    {% if call_log %}
+    <div>
+        {% for call in call_log %}
+        <div class="call-log-item">
+            <div>
+                <div style="font-weight: 600;">{{ call.name }}</div>
+                <div style="font-size: 12px; color: #666;">{{ call.number }}</div>
+            </div>
+            <div style="text-align: right;">
+                <div class="{{ 'call-allowed' if call.allowed else 'call-blocked' }}">
+                    {{ '✓ Allowed' if call.allowed else '✗ Blocked' }}
+                </div>
+                <div style="font-size: 12px; color: #666;">
+                    {{ call.timestamp[:10] }}
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <p style="color: #666;">No calls yet.</p>
+    {% endif %}
+    <div style="margin-top: 16px;">
+        <a href="{{ url_for('call_log_page') }}" class="btn btn-secondary">View All</a>
+    </div>
+</div>
+
+{% if config.quiet_hours.enabled %}
+<div class="card">
+    <h2>🌙 Quiet Hours Active</h2>
+    <p style="color: #666;">
+        Calls blocked from {{ config.quiet_hours.start }} to {{ config.quiet_hours.end }}
+    </p>
+</div>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% block title %}Contacts - Kid Phone{% endblock %}
+
+{% block content %}
+<div class="card">
+    <h1>👥 Approved Contacts</h1>
+    <p style="color: #666; margin-bottom: 20px;">
+        Your child can only call numbers on this list.
+    </p>
+    
+    <form method="POST" action="{{ url_for('whitelist_add') }}">
+        <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+            <div style="flex: 1; min-width: 150px;">
+                <input type="text" name="name" placeholder="Name (e.g., Grandma)">
+            </div>
+            <div style="flex: 1; min-width: 150px;">
+                <input type="tel" name="number" placeholder="Phone number" required>
+            </div>
+            <button type="submit" class="btn">+ Add</button>
+        </div>
+    </form>
+</div>
+
+<div class="card">
+    <h2>Contact List ({{ whitelist|length }})</h2>
+    
+    {% if whitelist %}
+    <ul class="contact-list">
+        {% for contact in whitelist %}
+        <li class="contact-item">
+            <div class="contact-info">
+                <div class="contact-avatar">{{ contact.name[0] }}</div>
+                <div>
+                    <div class="contact-name">{{ contact.name }}</div>
+                    <div class="contact-number">{{ contact.number }}</div>
+                </div>
+            </div>
+            <a href="{{ url_for('whitelist_remove', number=contact.number) }}" 
+               class="btn btn-danger" 
+               style="padding: 8px 12px; font-size: 14px;"
+               onclick="return confirm('Remove {{ contact.name }}?')">
+                Remove
+            </a>
+        </li>
+        {% endfor %}
+    </ul>
+    {% else %}
+    <p style="color: #666; text-align: center; padding: 40px 0;">
+        No contacts added yet.<br>
+        Add someone above to get started!
+    </p>
+    {% endif %}
+</div>
+
+<div class="card" style="background: #f8f9fa;">
+    <h2>💡 Tips</h2>
+    <ul style="color: #666; padding-left: 20px; line-height: 1.8;">
+        <li>Add family members, close friends, and trusted neighbors</li>
+        <li>Use full phone numbers including area code</li>
+        <li>911 is always allowed for emergencies</li>
+    </ul>
+</div>
+{% endblock %}

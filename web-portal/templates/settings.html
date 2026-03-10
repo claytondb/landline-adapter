@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% block title %}Settings - Kid Phone{% endblock %}
+
+{% block content %}
+<div class="card">
+    <h1>⚙️ Settings</h1>
+</div>
+
+<form method="POST">
+    <div class="card">
+        <h2>📞 Phone Settings</h2>
+        <div class="form-group">
+            <label>Phone Name</label>
+            <input type="text" name="phone_name" value="{{ config.phone_name }}">
+        </div>
+    </div>
+    
+    <div class="card">
+        <h2>🌙 Quiet Hours</h2>
+        <p style="color: #666; margin-bottom: 16px;">
+            Block all calls during bedtime.
+        </p>
+        
+        <div class="form-group">
+            <div class="checkbox-group">
+                <input type="checkbox" name="quiet_enabled" id="quiet_enabled"
+                       {% if config.quiet_hours.enabled %}checked{% endif %}>
+                <label for="quiet_enabled" style="margin: 0;">Enable quiet hours</label>
+            </div>
+        </div>
+        
+        <div class="time-inputs">
+            <div class="form-group">
+                <label>Start Time</label>
+                <input type="time" name="quiet_start" value="{{ config.quiet_hours.start }}">
+            </div>
+            <div class="form-group">
+                <label>End Time</label>
+                <input type="time" name="quiet_end" value="{{ config.quiet_hours.end }}">
+            </div>
+        </div>
+    </div>
+    
+    <div class="card">
+        <h2>🔒 Change Password</h2>
+        <div class="form-group">
+            <label>New Password (leave blank to keep current)</label>
+            <input type="password" name="new_password" placeholder="New password">
+        </div>
+    </div>
+    
+    <button type="submit" class="btn" style="width: 100%;">Save Settings</button>
+</form>
+{% endblock %}

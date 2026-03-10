@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block title %}Login - Kid Phone{% endblock %}
+
+{% block content %}
+<div class="card" style="text-align: center;">
+    <h1>📞 Kid Phone</h1>
+    <p style="color: #666; margin-bottom: 24px;">Parent Control Panel</p>
+    
+    {% if error %}
+    <div class="error">{{ error }}</div>
+    {% endif %}
+    
+    <form method="POST">
+        <div class="form-group">
+            <input type="password" name="password" placeholder="Enter password" required autofocus>
+        </div>
+        <button type="submit" class="btn" style="width: 100%;">Login</button>
+    </form>
+</div>
+{% endblock %}
